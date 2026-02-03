@@ -22,7 +22,7 @@ Nexus_016 - Proyecto de Titulación
 #>
 
 param(
-    [string]$Modo = "GUI",
+    [string]$Modo = "GUI"
     [string]$Sistema = "Windows",
     [string[]]$Apps,
     [switch]$Listar,
