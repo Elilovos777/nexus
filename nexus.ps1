@@ -21,13 +21,7 @@ Nexus_016 - Proyecto de Titulación
 4.7
 #>
 
-param(
-    [string]$Modo = "GUI"
-    [string]$Sistema = "Windows",
-    [string[]]$Apps,
-    [switch]$Listar,
-    [switch]$Ayuda
-)
+
 
 # Configuración Global
 $Global:Config = @{
