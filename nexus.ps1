@@ -1,3 +1,6 @@
+# NeXus
+# Copyright (c) 2026 Elilovos777
+# Licensed under the MIT License
 #Requires -RunAsAdministrator
 Clear-Host
 Write-Host "⚠️ NeXus - Instalador de aplicaciones" -ForegroundColor Yellow
