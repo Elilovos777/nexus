@@ -3004,7 +3004,7 @@ function Show-Info {
 ║  Sistema de Instalación Multiplataforma                   ║
 ║                                                           ║
 ║  Desarrollado por: Nexus_016                              ║
-║  Institución de desarollo: [CECyTE 30]                    ║
+║  Institución de desarrollo: [CECyTE 30]                   ║
 ║  Especialidad: Técnico en Programación                    ║
 ║                                                           ║
 ║  Este proyecto fue desarrollado como trabajo de           ║
