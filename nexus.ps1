@@ -1892,7 +1892,7 @@ function Show-MenuPrincipal {
     Write-Host "$($Global:Config.Plataforma)" -ForegroundColor Green
     Write-Host ""
     Write-Host "╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Blue
-    Write-Host "║ [1] 🖥️ INSTALAR - Instalar aplicaciones                   ║" -ForegroundColor White
+    Write-Host "║ [1] 🖥️ INSTALAR - Instalar aplicaciones                  ║" -ForegroundColor White
     Write-Host "║ [2] 💿 SIST. OPERA - Descargar Sistemas Operativos       ║" -ForegroundColor White
     Write-Host "║ [3] ⚙️ TWEAKS - Optimizaciones del sistema               ║" -ForegroundColor White
     Write-Host "║ [4] 🔧 DESINSTALAR - Remover aplicaciones                ║" -ForegroundColor White
