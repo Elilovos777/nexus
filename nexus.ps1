@@ -1879,8 +1879,8 @@ function Show-Header {
 ║   ██║ ╚████║███████╗██╔╝ ██╗╚██████╔╝███████║             ║
 ║   ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝             ║
 ║                                                           ║
-║   Sistema de Instalación Multiplataforma v$($Global:Config.Version)          ║
-║   by $($Global:Config.Autor)                                          ║
+║   Sistema de Instalación Multiplataforma v$($Global:Config.Version)             ║
+║   by $($Global:Config.Autor)                                            ║
 ╚═══════════════════════════════════════════════════════════╝
 "@ -ForegroundColor Cyan
     Write-Host ""
