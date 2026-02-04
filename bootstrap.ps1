@@ -1,3 +1,6 @@
+# NeXus
+# Copyright (c) 2026 Elilovos777
+# Licensed under the MIT License
 # NeXus Bootstrap Loader
 
 $ErrorActionPreference = "Stop"
