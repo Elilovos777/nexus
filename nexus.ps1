@@ -2610,8 +2610,8 @@ function Show-MenuTweaks {
         Write-Host "║ [5] 🧹 LIMPIEZA - Limpiar archivos temporales            ║" -ForegroundColor White
         Write-Host "║ [6] 🔧 AVANZADO - Opciones avanzadas de sistema          ║" -ForegroundColor White
         Write-Host "║ [7] ↩️ RESTAURAR - Volver a configuración original       ║" -ForegroundColor White
-        Write-Host "║                                                           ║"
-        Write-Host "║ [0] 🔙 Volver al menú principal                          ║" -ForegroundColor Red
+        Write-Host "║                                                          ║"
+        Write-Host "║ [0] 🔙 Volver al menú principal                           ║" -ForegroundColor Red
         Write-Host "╚═══════════════════════════════════════════════════════════╝" -ForegroundColor Yellow
         Write-Host ""
         $tw = Read-Host " Selecciona una opción"
@@ -2789,8 +2789,8 @@ function Show-MenuExtensiones {
         Write-Host "║ [1] 💻 VS CODE EXTENSIONS - Extensiones de desarrollo    ║" -ForegroundColor White
         Write-Host "║ [2] 🌐 CHROME EXTENSIONS - Extensiones de navegador      ║" -ForegroundColor White
         Write-Host "║ [3] 🦊 FIREFOX ADDONS - Complementos Firefox             ║" -ForegroundColor White
-        Write-Host "║ [4] ⚡ POWER TOYS - Módulos de PowerToys                ║" -ForegroundColor White
-        Write-Host "║                                                           ║"
+        Write-Host "║ [4] ⚡ POWER TOYS - Módulos de PowerToys                 ║" -ForegroundColor White
+        Write-Host "║                                                          ║"
         Write-Host "║ [0] 🔙 Volver al menú principal                          ║" -ForegroundColor Red
         Write-Host "╚═══════════════════════════════════════════════════════════╝" -ForegroundColor Magenta
         Write-Host ""
@@ -2901,8 +2901,8 @@ function Show-MenuDesinstalar {
         Write-Host "║ [1] 🗑️ BLOATWARE WINDOWS - Eliminar apps preinstaladas   ║" -ForegroundColor White
         Write-Host "║ [2] 📋 LISTAR INSTALADAS - Ver apps instaladas           ║" -ForegroundColor White
         Write-Host "║ [3] 🔍 BUSCAR Y ELIMINAR - Buscar app específica         ║" -ForegroundColor White
-        Write-Host "║ [4] ⚠️ ELIMINAR TODO - Formatear estilo (CUIDADO)       ║" -ForegroundColor Yellow
-        Write-Host "║                                                           ║"
+        Write-Host "║ [4] ⚠️ ELIMINAR TODO - Formatear estilo (CUIDADO)        ║" -ForegroundColor Yellow
+        Write-Host "║                                                          ║"
         Write-Host "║ [0] 🔙 Volver al menú principal                          ║" -ForegroundColor Red
         Write-Host "╚═══════════════════════════════════════════════════════════╝" -ForegroundColor Red
         Write-Host ""
