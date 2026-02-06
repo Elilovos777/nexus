@@ -2611,7 +2611,7 @@ function Show-MenuTweaks {
         Write-Host "║ [6] 🔧 AVANZADO - Opciones avanzadas de sistema          ║" -ForegroundColor White
         Write-Host "║ [7] ↩️ RESTAURAR - Volver a configuración original       ║" -ForegroundColor White
         Write-Host "║                                                          ║"
-        Write-Host "║ [0] 🔙 Volver al menú principal                           ║" -ForegroundColor Red
+        Write-Host "║ [0] 🔙 Volver al menú principal                          ║" -ForegroundColor Red
         Write-Host "╚═══════════════════════════════════════════════════════════╝" -ForegroundColor Yellow
         Write-Host ""
         $tw = Read-Host " Selecciona una opción"
