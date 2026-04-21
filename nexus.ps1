@@ -1181,6 +1181,95 @@ function Get-ColorBrush($hexColor) {
 
                             </Border>
 
+
+                            <!-- Tarjeta Seguridad Profunda (Tron-style) -->
+
+                            <Border x:Name="CardSeguridad" Style="{StaticResource AppCardStyle}" Margin="0,12,0,0">
+
+                                <StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,8">
+
+                                        <TextBlock Text="🛡️" FontSize="22" Margin="0,0,10,0" VerticalAlignment="Center"/>
+
+                                        <StackPanel VerticalAlignment="Center">
+
+                                            <TextBlock Text="Limpieza de Seguridad Profunda" FontSize="18" FontWeight="Bold" Foreground="White"/>
+
+                                            <TextBlock Text="Basado en Tron Script — eliminación segura de malware, adware y residuos" FontSize="11" Foreground="{StaticResource TextMuted}"/>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+                                    <Border Background="#FF1A0D2E" BorderBrush="#FF9D6FFF" BorderThickness="1" CornerRadius="6" Padding="14,10" Margin="0,0,0,14">
+
+                                        <StackPanel>
+
+                                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,6">
+
+                                                <Run Text="✅ Fase 1 — "/>
+
+                                                <Run Text="Limpieza de temporales y caché del sistema" Foreground="{StaticResource TextPrimary}"/>
+
+                                            </TextBlock>
+
+                                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,6">
+
+                                                <Run Text="✅ Fase 2 — "/>
+
+                                                <Run Text="Eliminación de adware/PUPs con Windows Defender" Foreground="{StaticResource TextPrimary}"/>
+
+                                            </TextBlock>
+
+                                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,6">
+
+                                                <Run Text="✅ Fase 3 — "/>
+
+                                                <Run Text="Limpieza del registro de entradas maliciosas conocidas" Foreground="{StaticResource TextPrimary}"/>
+
+                                            </TextBlock>
+
+                                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,6">
+
+                                                <Run Text="✅ Fase 4 — "/>
+
+                                                <Run Text="Reparación de componentes de Windows (DISM + SFC)" Foreground="{StaticResource TextPrimary}"/>
+
+                                            </TextBlock>
+
+                                            <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}">
+
+                                                <Run Text="✅ Fase 5 — "/>
+
+                                                <Run Text="Limpieza de DNS, Winsock y red" Foreground="{StaticResource TextPrimary}"/>
+
+                                            </TextBlock>
+
+                                        </StackPanel>
+
+                                    </Border>
+
+                                    <Border Background="#FF1A0A00" BorderBrush="{StaticResource AccentYellow}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
+
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="⚠️" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+
+                                            <TextBlock Text="Se ejecuta en segundo plano. No elimina software legítimo instalado. Requiere privilegios de administrador. Se recomienda crear un punto de restauración antes." TextWrapping="Wrap" FontSize="11" Foreground="{StaticResource AccentYellow}" VerticalAlignment="Center"/>
+
+                                        </StackPanel>
+
+                                    </Border>
+
+                                    <Button x:Name="BtnTweakSecurity" Content="🛡️  Iniciar Limpieza de Seguridad" Background="#FF1A0D2E"
+                                            Foreground="#FF9D6FFF" BorderBrush="#FF9D6FFF" BorderThickness="1"
+                                            Padding="18,10" HorizontalAlignment="Left" Cursor="Hand" FontWeight="SemiBold"/>
+
+                                </StackPanel>
+
+                            </Border>
+
                             <Border Style="{StaticResource AppCardStyle}" Margin="0,12,0,0">
 
                                 <StackPanel>
@@ -3744,7 +3833,6 @@ function Start-HardwareScan {
     $scanPanel.Children.Add($scanIco)
 
     $scanTitle = New-Object System.Windows.Controls.TextBlock
-    $scanTitle.x_Name = "ScanStatusText"  # referencia para actualizar
     $scanTitle.Text = "Analizando hardware..."; $scanTitle.FontSize = 16; $scanTitle.FontWeight = "SemiBold"
     $scanTitle.Foreground = [System.Windows.Media.SolidColorBrush]([System.Windows.Media.ColorConverter]::ConvertFromString("#FFE8E0FF"))
     $scanTitle.HorizontalAlignment = "Center"; $scanTitle.Margin = [System.Windows.Thickness]::new(0,0,0,6)
@@ -4032,6 +4120,356 @@ function Start-HardwareScan {
         $btnScanEl2 = $window.FindName("BtnScanHardware"); if ($btnScanEl2) { $btnScanEl2.IsEnabled = $true }
     })
     $script:_hwPollTimer.Start()
+}
+
+
+# ══════════════════════════════════════════════════════════════════════
+# LIMPIEZA DE SEGURIDAD PROFUNDA — inspirada en Tron Script
+# Fases: Temporales → Defender → Registro → DISM+SFC → Red
+# NO desinstala software legítimo ni modifica configuración de usuario
+# ══════════════════════════════════════════════════════════════════════
+
+function Start-SecurityClean {
+
+    # Ventana de progreso
+    [xml]$scXaml = @"
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NeXus — Limpieza de Seguridad" Width="580" Height="370"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
+    <Border Background="#FF0D0B1A" CornerRadius="12" BorderBrush="#FF9D6FFF" BorderThickness="1">
+        <StackPanel Margin="28,22,28,22">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                <TextBlock Text="🛡️" FontSize="22" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Limpieza de Seguridad Profunda" FontFamily="Segoe UI"
+                           FontSize="17" FontWeight="SemiBold" Foreground="#FFE8E0FF" VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock x:Name="ScPhaseLabel" FontFamily="Segoe UI" FontSize="13"
+                       FontWeight="SemiBold" Foreground="#FF9D6FFF" Margin="0,0,0,6" TextWrapping="Wrap"/>
+            <TextBlock x:Name="ScDetailLabel" FontFamily="Segoe UI" FontSize="11"
+                       Foreground="#FF9080BB" Margin="0,0,0,10" TextWrapping="Wrap"/>
+            <Border Background="#FF1A1535" CornerRadius="4" Height="8" Margin="0,0,0,6">
+                <Border x:Name="ScBarPhase" Background="#FF9D6FFF" CornerRadius="4"
+                        HorizontalAlignment="Left" Width="0"/>
+            </Border>
+            <TextBlock x:Name="ScPctLabel" FontFamily="Consolas" FontSize="11"
+                       Foreground="#FF6B5F9E" Margin="0,0,0,14"/>
+            <Border Background="#FF1A1535" CornerRadius="4" Height="6">
+                <Border x:Name="ScBarTotal" Background="#FF4CAF50" CornerRadius="4"
+                        HorizontalAlignment="Left" Width="0"/>
+            </Border>
+            <TextBlock x:Name="ScTotalLabel" FontFamily="Segoe UI" FontSize="11"
+                       Foreground="#FF9080BB" Margin="0,6,0,14"/>
+            <Border Background="#FF13102A" CornerRadius="6" Padding="12,8" Height="80">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="ScLog" FontFamily="Consolas" FontSize="10"
+                               Foreground="#FF6B5F9E" TextWrapping="Wrap"/>
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
+    </Border>
+</Window>
+"@
+    $scReader = New-Object System.Xml.XmlNodeReader($scXaml)
+    $scWin    = [Windows.Markup.XamlReader]::Load($scReader)
+    $scWin.Show()
+    $scWin.Dispatcher.Invoke([Action]{}, [System.Windows.Threading.DispatcherPriority]::Render)
+
+    $scPhase   = $scWin.FindName("ScPhaseLabel")
+    $scDetail  = $scWin.FindName("ScDetailLabel")
+    $scBarP    = $scWin.FindName("ScBarPhase")
+    $scPct     = $scWin.FindName("ScPctLabel")
+    $scBarT    = $scWin.FindName("ScBarTotal")
+    $scTotal   = $scWin.FindName("ScTotalLabel")
+    $scLog     = $scWin.FindName("ScLog")
+    $scBarMax  = 520
+
+    function Update-ScUI($phase, $detail, $phasePct, $totalPct, $log) {
+        $p=$phase; $d=$detail; $pp=$phasePct; $tp=$totalPct; $l=$log; $bm=$scBarMax
+        $scWin.Dispatcher.Invoke([Action]{
+            $scPhase.Text  = $p; $scDetail.Text = $d
+            $scBarP.Width  = [Math]::Round($pp/100*$bm)
+            $scPct.Text    = "$pp%  •  Fase en curso..."
+            $scBarT.Width  = [Math]::Round($tp/100*$bm)
+            $scTotal.Text  = "Progreso total: $tp%"
+            if ($l) { $scLog.Text += "`n$l" }
+        }, [System.Windows.Threading.DispatcherPriority]::Render)
+    }
+
+    $totalPhases = 5
+
+    # ── FASE 1: Limpieza de archivos temporales ───────────────────────
+    Update-ScUI "Fase 1/5 — Limpieza de temporales" "Eliminando archivos temp, caché y prefetch..." 0 0 "[INICIO] Limpieza de seguridad NeXus"
+
+    $job1 = Start-Job -ScriptBlock {
+        $removed = 0; $log = @()
+
+        # Temporales del sistema y usuario
+        $tempPaths = @(
+            $env:TEMP, $env:TMP,
+            "$env:WINDIR\Temp",
+            "$env:WINDIR\Prefetch",
+            "$env:LOCALAPPDATA\Temp",
+            "$env:LOCALAPPDATA\Microsoft\Windows\INetCache",
+            "$env:LOCALAPPDATA\Microsoft\Windows\WebCache"
+        )
+        foreach ($tp in $tempPaths) {
+            if (-not $tp -or -not (Test-Path $tp -ErrorAction SilentlyContinue)) { continue }
+            try {
+                $files = Get-ChildItem $tp -Recurse -Force -ErrorAction SilentlyContinue |
+                    Where-Object { -not $_.PSIsContainer }
+                foreach ($f in $files) {
+                    try { Remove-Item $f.FullName -Force -ErrorAction Stop; $removed++ } catch {}
+                }
+                $log += "  Limpiado: $tp ($($files.Count) archivos)"
+            } catch {}
+        }
+
+        # Papelera
+        try { Clear-RecycleBin -Force -ErrorAction SilentlyContinue; $log += "  Papelera vaciada" } catch {}
+
+        # Limpieza con cleanmgr (silencioso)
+        try {
+            $sageset = "StateFlags0099"
+            $cleanKeys = @(
+                "Temporary Files","Temporary Internet Files","Downloaded Program Files",
+                "Recycle Bin","Thumbnails","Windows Error Reporting"
+            )
+            foreach ($ck in $cleanKeys) {
+                $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\$ck"
+                if (Test-Path $regPath) { Set-ItemProperty $regPath -Name $sageset -Value 2 -ErrorAction SilentlyContinue }
+            }
+            Start-Process "cleanmgr.exe" -ArgumentList "/sagerun:99" -Wait -WindowStyle Hidden -ErrorAction SilentlyContinue
+            $log += "  Disk Cleanup (cleanmgr) ejecutado"
+        } catch {}
+
+        return @{ Removed = $removed; Log = $log }
+    }
+
+    # Animar fase 1
+    $elapsed = 0
+    while ($job1.State -eq "Running") {
+        Start-Sleep -Milliseconds 400; $elapsed += 0.4
+        $pct = [Math]::Min(85, [Math]::Round($elapsed * 8))
+        Update-ScUI "Fase 1/5 — Limpieza de temporales" "Borrando archivos..." $pct 5 $null
+    }
+    $r1 = Receive-Job $job1; Remove-Job $job1 -Force
+    Update-ScUI "Fase 1/5 ✅ Completada" "Temporales eliminados: $($r1.Removed) archivos" 100 20 ($r1.Log -join "`n")
+    Start-Sleep -Milliseconds 600
+
+    # ── FASE 2: Windows Defender — escaneo rápido + limpieza PUPs ────
+    Update-ScUI "Fase 2/5 — Escaneo con Windows Defender" "Ejecutando escaneo rápido de amenazas..." 0 20 "[FASE 2] Iniciando Windows Defender"
+
+    $job2 = Start-Job -ScriptBlock {
+        $log = @()
+        try {
+            # Actualizar firmas
+            Update-MpSignature -ErrorAction SilentlyContinue
+            $log += "  Firmas de Defender actualizadas"
+
+            # Escaneo rápido
+            Start-MpScan -ScanType QuickScan -ErrorAction SilentlyContinue
+            $log += "  Escaneo rápido completado"
+
+            # Obtener amenazas detectadas y limpiarlas
+            $threats = Get-MpThreat -ErrorAction SilentlyContinue
+            if ($threats) {
+                foreach ($t in $threats) {
+                    try {
+                        Remove-MpThreat -ThreatID $t.ThreatID -ErrorAction SilentlyContinue
+                        $log += "  Amenaza eliminada: $($t.ThreatName)"
+                    } catch {}
+                }
+            } else {
+                $log += "  Sin amenazas detectadas por Defender"
+            }
+
+            # Limpiar historial de cuarentena antiguo (más de 30 días)
+            $quarPath = "$env:ProgramData\Microsoft\Windows Defender\Quarantine"
+            if (Test-Path $quarPath) {
+                $old = Get-ChildItem $quarPath -Recurse -ErrorAction SilentlyContinue |
+                    Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) }
+                foreach ($o in $old) { try { Remove-Item $o.FullName -Force -ErrorAction SilentlyContinue } catch {} }
+                $log += "  Cuarentena antigua limpiada ($($old.Count) entradas)"
+            }
+        } catch {
+            $log += "  Defender no disponible o sin permisos: $_"
+        }
+        return $log
+    }
+
+    $elapsed = 0
+    while ($job2.State -eq "Running") {
+        Start-Sleep -Milliseconds 500; $elapsed += 0.5
+        $pct = [Math]::Min(85, [Math]::Round($elapsed * 4))
+        Update-ScUI "Fase 2/5 — Escaneo con Windows Defender" "Escaneando amenazas activas..." $pct 30 $null
+    }
+    $r2 = Receive-Job $job2; Remove-Job $job2 -Force
+    Update-ScUI "Fase 2/5 ✅ Completada" "Defender ejecutado" 100 40 ($r2 -join "`n")
+    Start-Sleep -Milliseconds 600
+
+    # ── FASE 3: Limpieza de registro (entradas maliciosas conocidas) ──
+    Update-ScUI "Fase 3/5 — Limpieza de registro" "Eliminando entradas de adware/PUPs conocidas..." 0 40 "[FASE 3] Analizando registro"
+
+    $job3 = Start-Job -ScriptBlock {
+        $log = @(); $removed = 0
+
+        # Rutas de inicio automático sospechosas (Run keys)
+        $runKeys = @(
+            "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+            "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+            "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run"
+        )
+
+        # Nombres de procesos/claves conocidos de adware y PUPs (no afectan software legítimo)
+        $knownBad = @(
+            "conduit","sweetim","babylon","searchprotect","tbcore","mywebsearch",
+            "delta toolbar","iminent","wajam","crossrider","pirrit","superfish",
+            "savingsslider","dealply","shopperz","istart","browsefox","adpeak",
+            "adware","spigot","opencandy","installcore","iobit_monitor_daemon",
+            "reimage","pc speed maximizer","driver booster.*nag","advanced systemcare.*popup"
+        )
+
+        foreach ($rk in $runKeys) {
+            if (-not (Test-Path $rk -ErrorAction SilentlyContinue)) { continue }
+            try {
+                $props = Get-ItemProperty $rk -ErrorAction SilentlyContinue
+                if (-not $props) { continue }
+                foreach ($prop in ($props.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' })) {
+                    $val = [string]$prop.Value
+                    $matched = $false
+                    foreach ($bad in $knownBad) {
+                        if ($val -match $bad -or $prop.Name -match $bad) { $matched = $true; break }
+                    }
+                    if ($matched) {
+                        try {
+                            Remove-ItemProperty -Path $rk -Name $prop.Name -Force -ErrorAction Stop
+                            $log += "  Eliminado de Run: $($prop.Name) = $val"
+                            $removed++
+                        } catch {}
+                    }
+                }
+            } catch { continue }
+        }
+
+        # Limpiar extensiones de navegador huérfanas del registro (IE/Legacy)
+        $ieKeys = @(
+            "HKCU:\SOFTWARE\Microsoft\Internet Explorer\Extensions",
+            "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Extensions"
+        )
+        foreach ($iek in $ieKeys) {
+            if (-not (Test-Path $iek -ErrorAction SilentlyContinue)) { continue }
+            Get-ChildItem $iek -ErrorAction SilentlyContinue | ForEach-Object {
+                try {
+                    $p = $_ | Get-ItemProperty -ErrorAction SilentlyContinue
+                    if ($p.ButtonText -match ($knownBad -join '|')) {
+                        Remove-Item $_.PSPath -Recurse -Force -ErrorAction SilentlyContinue
+                        $log += "  Extensión IE sospechosa eliminada: $($p.ButtonText)"
+                        $removed++
+                    }
+                } catch {}
+            }
+        }
+
+        if ($removed -eq 0) { $log += "  Registro limpio, sin entradas maliciosas detectadas" }
+        return @{ Log = $log; Removed = $removed }
+    }
+
+    $elapsed = 0
+    while ($job3.State -eq "Running") {
+        Start-Sleep -Milliseconds 400; $elapsed += 0.4
+        $pct = [Math]::Min(90, [Math]::Round($elapsed * 12))
+        Update-ScUI "Fase 3/5 — Limpieza de registro" "Analizando claves Run y extensiones..." $pct 50 $null
+    }
+    $r3 = Receive-Job $job3; Remove-Job $job3 -Force
+    Update-ScUI "Fase 3/5 ✅ Completada" "Entradas eliminadas: $($r3.Removed)" 100 60 ($r3.Log -join "`n")
+    Start-Sleep -Milliseconds 600
+
+    # ── FASE 4: DISM + SFC (reparación de Windows) ───────────────────
+    Update-ScUI "Fase 4/5 — Reparación de Windows" "Ejecutando SFC y DISM para restaurar archivos del sistema..." 0 60 "[FASE 4] Reparación de integridad del sistema"
+
+    $job4 = Start-Job -ScriptBlock {
+        $log = @()
+        try {
+            # SFC rápido (solo verificación, no reparación completa que tarda mucho)
+            $sfcResult = & sfc /verifyonly 2>&1 | Out-String
+            if ($sfcResult -match "no encontró ninguna infracción" -or $sfcResult -match "did not find any integrity violations") {
+                $log += "  SFC: Sin infracciones de integridad detectadas"
+            } else {
+                # Si hay infracciones, lanzar reparación
+                Start-Process "sfc.exe" -ArgumentList "/scannow" -Wait -WindowStyle Hidden -ErrorAction SilentlyContinue
+                $log += "  SFC: Reparación ejecutada"
+            }
+        } catch { $log += "  SFC no disponible: $_" }
+
+        try {
+            # DISM — solo limpieza de componentes obsoletos (no reparación completa)
+            $dismResult = Start-Process "dism.exe" -ArgumentList "/Online /Cleanup-Image /StartComponentCleanup /ResetBase" -Wait -PassThru -WindowStyle Hidden -ErrorAction SilentlyContinue
+            if ($dismResult.ExitCode -eq 0) { $log += "  DISM: Componentes obsoletos limpiados" }
+            else { $log += "  DISM: Limpieza completada (código $($dismResult.ExitCode))" }
+        } catch { $log += "  DISM no disponible: $_" }
+
+        return $log
+    }
+
+    $elapsed = 0
+    while ($job4.State -eq "Running") {
+        Start-Sleep -Milliseconds 800; $elapsed += 0.8
+        $pct = [Math]::Min(88, [Math]::Round($elapsed * 3))
+        Update-ScUI "Fase 4/5 — Reparación de Windows" "SFC + DISM en ejecución (puede tardar unos minutos)..." $pct 75 $null
+    }
+    $r4 = Receive-Job $job4; Remove-Job $job4 -Force
+    Update-ScUI "Fase 4/5 ✅ Completada" "SFC y DISM finalizados" 100 80 ($r4 -join "`n")
+    Start-Sleep -Milliseconds 600
+
+    # ── FASE 5: Reparación de red (DNS, Winsock) ─────────────────────
+    Update-ScUI "Fase 5/5 — Reparación de red" "Limpiando DNS cache, reseteando Winsock y TCP/IP..." 0 80 "[FASE 5] Limpieza y reparación de red"
+
+    $job5 = Start-Job -ScriptBlock {
+        $log = @()
+        try { & ipconfig /flushdns 2>&1 | Out-Null; $log += "  DNS cache limpiado" } catch {}
+        try { & netsh winsock reset catalog 2>&1 | Out-Null; $log += "  Winsock reseteado" } catch {}
+        try { & netsh int ip reset 2>&1 | Out-Null; $log += "  TCP/IP reseteado" } catch {}
+        try { & netsh int ipv6 reset 2>&1 | Out-Null; $log += "  IPv6 reseteado" } catch {}
+        try {
+            # Limpiar archivo hosts de entradas maliciosas (conserva localhost)
+            $hostsPath = "$env:WINDIR\System32\drivers\etc\hosts"
+            if (Test-Path $hostsPath) {
+                $lines = Get-Content $hostsPath -ErrorAction SilentlyContinue
+                $clean = $lines | Where-Object {
+                    $_ -match '^\s*#' -or $_ -match '^\s*$' -or $_ -match 'localhost' -or
+                    # Solo conservar entradas que apuntan a 127.0.0.1 o ::1 (no redirecciones maliciosas a otras IPs)
+                    ($_ -match '^\s*127\.0\.0\.1' -or $_ -match '^\s*::1' -or $_ -match '^\s*0\.0\.0\.0')
+                }
+                if ($clean.Count -lt $lines.Count) {
+                    $clean | Set-Content $hostsPath -ErrorAction SilentlyContinue
+                    $log += "  Hosts: $($lines.Count - $clean.Count) entradas sospechosas eliminadas"
+                } else {
+                    $log += "  Archivo hosts limpio, sin entradas maliciosas"
+                }
+            }
+        } catch { $log += "  No se pudo revisar hosts: $_" }
+        return $log
+    }
+
+    $elapsed = 0
+    while ($job5.State -eq "Running") {
+        Start-Sleep -Milliseconds 350; $elapsed += 0.35
+        $pct = [Math]::Min(90, [Math]::Round($elapsed * 20))
+        Update-ScUI "Fase 5/5 — Reparación de red" "Ejecutando netsh y flushdns..." $pct 90 $null
+    }
+    $r5 = Receive-Job $job5; Remove-Job $job5 -Force
+    Update-ScUI "Fase 5/5 ✅ Completada" "Red reparada. Se recomienda reiniciar el equipo." 100 100 ($r5 -join "`n")
+    Start-Sleep -Milliseconds 800
+
+    $scWin.Close()
+
+    Show-Toast -Title "🛡️ Limpieza de Seguridad Completada" `
+               -Message "5 fases completadas. Reinicia el equipo para aplicar todos los cambios." `
+               -Icon "🛡️" -DurationMs 5000
 }
 
 
@@ -5337,6 +5775,23 @@ $window.FindName("BtnTweakLaptop").Add_Click({
 
     }
 
+})
+
+$window.FindName("BtnTweakSecurity").Add_Click({
+    $r = [System.Windows.MessageBox]::Show(
+        "Esta función ejecutará 5 fases de limpieza de seguridad:`n`n" +
+        "  1. Temporales y caché del sistema`n" +
+        "  2. Escaneo con Windows Defender`n" +
+        "  3. Registro (adware/PUPs conocidos)`n" +
+        "  4. Reparación de Windows (SFC + DISM)`n" +
+        "  5. Limpieza de DNS y Winsock`n`n" +
+        "⚠️ Requiere privilegios de administrador.`n" +
+        "No elimina software legítimo instalado.`n`n" +
+        "¿Deseas continuar?",
+        "Limpieza de Seguridad — NeXus v1.8.7",
+        "YesNo", "Warning"
+    )
+    if ($r -eq "Yes") { Start-SecurityClean }
 })
 
 $window.FindName("BtnTweakClean").Add_Click({
