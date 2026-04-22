@@ -1,4 +1,4 @@
-# NeXus Bootstrap Loader v1.8.7
+# NeXus Bootstrap Loader v1.9.0
 # Copyright (c) 2026 Elilovos777 (nexu_016)
 # Licensed under the MIT License
 #
@@ -29,7 +29,7 @@ Write-Host "  ██║╚██╗██║██╔══╝   ██╔██
 Write-Host "  ██║ ╚████║███████╗██╔╝ ██╗╚██████╔╝███████║" -ForegroundColor Magenta
 Write-Host "  ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝" -ForegroundColor Magenta
 Write-Host ""
-Write-Host "  Sistema de Automatización Multiplataforma  v1.8.7" -ForegroundColor Cyan
+Write-Host "  Sistema de Automatización Multiplataforma  v1.9.0" -ForegroundColor Cyan
 Write-Host "  by nexu_016 / Elilovos777" -ForegroundColor DarkGray
 Write-Host "  ─────────────────────────────────────────────────" -ForegroundColor DarkGray
 Write-Host ""
@@ -49,7 +49,7 @@ try {
     exit 1
 }
 
-Write-Host "  🔷 Descargando NeXus v1.8.7..." -ForegroundColor Cyan
+Write-Host "  🔷 Descargando NeXus v1.9.0..." -ForegroundColor Cyan
 
 try {
     $scriptContent = Invoke-RestMethod -Uri $scriptUrl -ErrorAction Stop
