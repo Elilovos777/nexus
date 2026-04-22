@@ -4,7 +4,7 @@
 
 .SYNOPSIS
 
-NeXus WPF GUI v1.8.6 - Instalador Multiplataforma Completo
+NeXus WPF GUI v1.9.0 - Sistema de Automatizacion Multiplataforma
 
 .DESCRIPTION
 
@@ -14,7 +14,7 @@ Versión completa con todas las funcionalidades del programa original.
 
 .VERSION
 
-1.8.6
+1.9.0
 
 .AUTHOR
 
@@ -60,7 +60,7 @@ function Get-ColorBrush($hexColor) {
 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
-        Title="NEXUS v1.8.6 - Sistema de Instalación Multiplataforma"
+        Title="NEXUS v1.9.0 - Sistema de Instalación Multiplataforma"
 
         Height="750" Width="1200"
 
@@ -499,7 +499,7 @@ function Get-ColorBrush($hexColor) {
                         <Run Text="Ne" Foreground="#FFD8CCFF" FontWeight="Light"/><Run Text="X" Foreground="#FF9D6FFF" FontWeight="Black" FontSize="26"/><Run Text="us" Foreground="#FFD8CCFF" FontWeight="Light"/>
                     </TextBlock>
 
-                    <TextBlock Text="Sistema de Instalación Multiplataforma v1.8.7" FontSize="11" Foreground="{StaticResource TextMuted}"/>
+                    <TextBlock Text="Sistema de Instalación Multiplataforma v1.9.0" FontSize="11" Foreground="{StaticResource TextMuted}"/>
 
                 </StackPanel>
 
@@ -1516,7 +1516,7 @@ function Get-ColorBrush($hexColor) {
 
                             <TextBlock Text="ℹ️ Acerca de NeXus" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,8"/>
 
-                            <TextBlock Text="Sistema de Instalación Multiplataforma v1.8.7"
+                            <TextBlock Text="Sistema de Instalación Multiplataforma v1.9.0"
 
                                        Foreground="{StaticResource AccentBlue}" FontSize="16" Margin="0,0,0,24"/>
 
@@ -1677,7 +1677,7 @@ function Get-ColorBrush($hexColor) {
                                                FontSize="11"
                                                FontWeight="Bold"
                                                Foreground="#FFDA3633"/>
-                                    <TextBlock Text="nexus v1.8.6"
+                                    <TextBlock Text="nexus v1.9.0"
                                                FontFamily="Consolas"
                                                FontSize="9"
                                                Foreground="#88DA3633"/>
@@ -4473,6 +4473,198 @@ function Start-SecurityClean {
 }
 
 
+# ════════════════════════════════════════════════════════════════════════
+# TABLA DE POST-INSTALACIÓN — rutas y comandos por app
+# ════════════════════════════════════════════════════════════════════════
+$script:postInstall = @{
+    "NodeJS"        = @{ ExeHint="node.exe"; NeedsPath=$true; SetupCmds=@("npm install -g npm@latest") }
+    "Python"        = @{ ExeHint="python.exe"; NeedsPath=$true; SetupCmds=@("python -m pip install --upgrade pip") }
+    "Git"           = @{ ExeHint="git.exe"; NeedsPath=$true; SetupCmds=@() }
+    "VSCode"        = @{ ExeHint="Code.exe"; ExeDirs=@("$env:LOCALAPPDATA\Programs\Microsoft VS Code") }
+    "Anaconda"      = @{ ExeHint="anaconda-navigator.exe"; SetupCmds=@("conda update -n base -c defaults conda -y") }
+    "DockerDesktop" = @{ ExeHint="Docker Desktop.exe"; ExeDirs=@("$env:ProgramFiles\Docker\Docker") }
+    "PostgreSQL"    = @{ ExeHint="pgAdmin4.exe"; SetupCmds=@("net start postgresql-x64-15") }
+    "Ruby"          = @{ ExeHint="ruby.exe"; NeedsPath=$true; SetupCmds=@("gem update --system") }
+    "Go"            = @{ ExeHint="go.exe"; NeedsPath=$true }
+    "Rust"          = @{ ExeHint="rustup.exe"; SetupCmds=@("rustup update stable") }
+    "PowerShell7"   = @{ ExeHint="pwsh.exe"; ExeDirs=@("$env:ProgramFiles\PowerShell\7") }
+    "Blender"       = @{ ExeHint="blender.exe" }
+    "Krita"         = @{ ExeHint="krita.exe" }
+    "GIMP"          = @{ ExeHint="gimp-2.10.exe"; ExeDirs=@("$env:ProgramFiles\GIMP 2\bin","$env:ProgramFiles\GIMP 3\bin") }
+    "Inkscape"      = @{ ExeHint="inkscape.exe" }
+    "OpenToonz"     = @{ ExeHint="OpenToonz.exe" }
+    "Pencil2D"      = @{ ExeHint="pencil2d.exe" }
+    "DaVinciResolve"= @{ ExeHint="Resolve.exe"; ExeDirs=@("$env:ProgramFiles\Blackmagic Design\DaVinci Resolve") }
+    "Kdenlive"      = @{ ExeHint="kdenlive.exe" }
+    "Audacity"      = @{ ExeHint="Audacity.exe" }
+    "VLC"           = @{ ExeHint="vlc.exe" }
+    "OBSStudio"     = @{ ExeHint="obs64.exe"; ExeDirs=@("$env:ProgramFiles\obs-studio\bin\64bit") }
+    "ArduinoIDE"    = @{ ExeHint="arduino_debug.exe"; ExeDirs=@("$env:ProgramFiles\Arduino IDE") }
+    "KiCad"         = @{ ExeHint="kicad.exe" }
+    "FreeCAD"       = @{ ExeHint="FreeCAD.exe" }
+    "Fusion360"     = @{ ExeHint="Fusion360.exe"; ExeDirs=@("$env:LOCALAPPDATA\Autodesk\webdeploy\production") }
+    "Chrome"        = @{ ExeHint="chrome.exe"; ExeDirs=@("$env:ProgramFiles\Google\Chrome\Application","${env:ProgramFiles(x86)}\Google\Chrome\Application") }
+    "Firefox"       = @{ ExeHint="firefox.exe"; ExeDirs=@("$env:ProgramFiles\Mozilla Firefox") }
+    "Brave"         = @{ ExeHint="brave.exe"; ExeDirs=@("$env:ProgramFiles\BraveSoftware\Brave-Browser\Application") }
+    "Opera"         = @{ ExeHint="opera.exe"; ExeDirs=@("$env:LOCALAPPDATA\Programs\Opera") }
+    "OperaGX"       = @{ ExeHint="opera.exe"; ExeDirs=@("$env:LOCALAPPDATA\Programs\Opera GX") }
+    "Discord"       = @{ ExeHint="Discord.exe"; ExeDirs=@("$env:LOCALAPPDATA\Discord") }
+    "Telegram"      = @{ ExeHint="Telegram.exe"; ExeDirs=@("$env:APPDATA\Telegram Desktop") }
+    "Slack"         = @{ ExeHint="slack.exe"; ExeDirs=@("$env:LOCALAPPDATA\slack") }
+    "Zoom"          = @{ ExeHint="Zoom.exe"; ExeDirs=@("$env:APPDATA\Zoom\bin") }
+    "Teams"         = @{ ExeHint="Teams.exe"; ExeDirs=@("$env:LOCALAPPDATA\Microsoft\Teams\current") }
+    "WhatsApp"      = @{ ExeHint="WhatsApp.exe"; ExeDirs=@("$env:LOCALAPPDATA\WhatsApp") }
+    "Rufus"         = @{ ExeHint="rufus*.exe"; ExeDirs=@("$env:ProgramFiles\Rufus","${env:ProgramFiles(x86)}\Rufus","$env:LOCALAPPDATA\Microsoft\WinGet\Packages") }
+    "7Zip"          = @{ ExeHint="7zFM.exe"; ExeDirs=@("$env:ProgramFiles\7-Zip","${env:ProgramFiles(x86)}\7-Zip") }
+    "Notepadpp"     = @{ ExeHint="notepad++.exe"; ExeDirs=@("$env:ProgramFiles\Notepad++","${env:ProgramFiles(x86)}\Notepad++") }
+    "VirtualBox"    = @{ ExeHint="VirtualBox.exe"; ExeDirs=@("$env:ProgramFiles\Oracle\VirtualBox") }
+    "Wireshark"     = @{ ExeHint="Wireshark.exe"; ExeDirs=@("$env:ProgramFiles\Wireshark") }
+    "Malwarebytes"  = @{ ExeHint="mbam.exe"; ExeDirs=@("$env:ProgramFiles\Malwarebytes\Anti-Malware") }
+}
+
+
+function Resolve-AppExe {
+    param([string]$AppKey, [string]$AppName)
+    $hint  = $null; $extra = @()
+    if ($script:postInstall -and $script:postInstall.ContainsKey($AppKey)) {
+        $pi = $script:postInstall[$AppKey]
+        $hint = $pi.ExeHint
+        if ($pi.ExeDirs) { $extra = $pi.ExeDirs }
+    }
+    $normName = ($AppName -replace '[^a-zA-Z0-9]','').ToLower()
+    if (-not $hint) { $hint = "$normName.exe" }
+
+    # 1. Rutas especificas de postInstall
+    foreach ($dir in $extra) {
+        if (-not $dir -or -not (Test-Path $dir -ErrorAction SilentlyContinue)) { continue }
+        $hit = Get-ChildItem $dir -Filter $hint -Recurse -Depth 3 -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -notmatch 'uninstall|setup|update|crash|helper' } |
+            Select-Object -First 1
+        if ($hit) { return $hit.FullName }
+    }
+
+    # 2. Registro de Windows
+    $regRoots = @(
+        'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall'
+    )
+    foreach ($rr in $regRoots) {
+        if (-not (Test-Path $rr -ErrorAction SilentlyContinue)) { continue }
+        foreach ($sk in (Get-ChildItem $rr -ErrorAction SilentlyContinue)) {
+            try {
+                $p = $sk | Get-ItemProperty -ErrorAction Stop
+                if (-not $p.DisplayName) { continue }
+                $dn = ($p.DisplayName.ToLower() -replace '[^a-z0-9]','')
+                if ($dn -like "*$normName*" -and $p.InstallLocation) {
+                    $loc = $p.InstallLocation
+                    if (Test-Path $loc -ErrorAction SilentlyContinue) {
+                        $hit = Get-ChildItem $loc -Filter $hint -Recurse -Depth 3 -ErrorAction SilentlyContinue |
+                            Where-Object { $_.Name -notmatch 'uninstall|setup|update|crash|helper' } |
+                            Sort-Object Length -Descending | Select-Object -First 1
+                        if ($hit) { return $hit.FullName }
+                        $hit2 = Get-ChildItem $loc -Filter '*.exe' -Depth 2 -ErrorAction SilentlyContinue |
+                            Where-Object { $_.Name -notmatch 'uninstall|setup|update|crash|helper' } |
+                            Sort-Object Length -Descending | Select-Object -First 1
+                        if ($hit2) { return $hit2.FullName }
+                    }
+                }
+            } catch { continue }
+        }
+    }
+
+    # 3. Menu de inicio
+    $smpaths = @(
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
+    )
+    foreach ($smp in $smpaths) {
+        if (-not (Test-Path $smp -ErrorAction SilentlyContinue)) { continue }
+        $lnk = Get-ChildItem $smp -Filter '*.lnk' -Recurse -Depth 3 -ErrorAction SilentlyContinue |
+            Where-Object { ($_.BaseName.ToLower() -replace '[^a-z0-9]','') -like "*$normName*" } |
+            Select-Object -First 1
+        if ($lnk) { return $lnk.FullName }
+    }
+
+    # 4. Program Files y WinGet
+    $sdirs = @($env:ProgramFiles, ${env:ProgramFiles(x86)},
+               "$env:LOCALAPPDATA\Programs",
+               "$env:LOCALAPPDATA\Microsoft\WinGet\Packages")
+    foreach ($sd in $sdirs) {
+        if (-not $sd -or -not (Test-Path $sd -ErrorAction SilentlyContinue)) { continue }
+        $hit = Get-ChildItem $sd -Filter $hint -Recurse -Depth 5 -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -notmatch 'uninstall|setup|update|crash|helper' } |
+            Select-Object -First 1
+        if ($hit) { return $hit.FullName }
+    }
+    return $null
+}
+
+function New-DesktopShortcut {
+    param([string]$AppName, [string]$ExePath, [string]$Desc, [string]$Category)
+    if (-not $ExePath) { return $false }
+    if ($ExePath -notmatch '\.lnk$' -and -not (Test-Path $ExePath -ErrorAction SilentlyContinue)) { return $false }
+    try {
+        $wsh = New-Object -ComObject WScript.Shell
+        # Escritorio del usuario
+        $desktop = [Environment]::GetFolderPath('Desktop')
+        $sc1 = $wsh.CreateShortcut("$desktop\$AppName.lnk")
+        $sc1.TargetPath = $ExePath
+        if ($ExePath -notmatch '\.lnk$') { $sc1.WorkingDirectory = (Split-Path $ExePath -ErrorAction SilentlyContinue) }
+        $sc1.Description = $Desc
+        $sc1.Save()
+        # Carpeta interna NeXus
+        $catDir = "C:\Nexus\Apps\$Category"
+        if (-not (Test-Path $catDir)) { New-Item -ItemType Directory -Path $catDir -Force | Out-Null }
+        $sc2 = $wsh.CreateShortcut("$catDir\$AppName.lnk")
+        $sc2.TargetPath = $ExePath
+        if ($ExePath -notmatch '\.lnk$') { $sc2.WorkingDirectory = (Split-Path $ExePath -ErrorAction SilentlyContinue) }
+        $sc2.Description = $Desc
+        $sc2.Save()
+        return $true
+    } catch { return $false }
+}
+
+function Invoke-PostInstall {
+    param([string]$AppKey, [string]$ExePath)
+    $msgs = @()
+    if (-not $script:postInstall -or -not $script:postInstall.ContainsKey($AppKey)) { return $msgs }
+    $pi = $script:postInstall[$AppKey]
+    if ($pi.NeedsPath -and $ExePath -and (Test-Path $ExePath -ErrorAction SilentlyContinue)) {
+        $exeDir = Split-Path $ExePath
+        $curPath = [Environment]::GetEnvironmentVariable('PATH','Machine')
+        if ($curPath -notlike "*$exeDir*") {
+            try {
+                [Environment]::SetEnvironmentVariable('PATH',"$curPath;$exeDir",'Machine')
+                $msgs += "PATH actualizado: $exeDir"
+            } catch { $msgs += "No se pudo actualizar PATH" }
+        }
+    }
+    foreach ($cmd in $pi.SetupCmds) {
+        try { & cmd.exe /c $cmd 2>&1 | Out-Null; $msgs += "OK: $cmd" }
+        catch { $msgs += "Fallo: $cmd" }
+    }
+    return $msgs
+}
+
+function Invoke-LaunchApp {
+    param([string]$AppKey, [string]$AppName)
+    $exe = Resolve-AppExe -AppKey $AppKey -AppName $AppName
+    if ($exe) {
+        try { Start-Process $exe }
+        catch {
+            [System.Windows.MessageBox]::Show(
+                "No se pudo abrir $AppName.`nRuta: $exe`n`nError: $_",
+                "NeXus — Error al abrir", "OK", "Warning")
+        }
+    } else {
+        [System.Windows.MessageBox]::Show(
+            "No se encontro el ejecutable de '$AppName'.`n`nPrueba buscarlo en el menu de inicio de Windows.",
+            "NeXus — App no localizada", "OK", "Information")
+    }
+}
+
+
 function Find-AppInfo($key) {
 
     foreach ($cat in $script:appDatabase[$script:currentPlatform].Keys) {
@@ -4573,13 +4765,20 @@ function Load-OSList {
 
         $btn.Content = $stack
 
+        $verCopy = $ver
         $btn.Add_Click({
 
             param($sender, $e)
 
-            $url = $script:osDatabase.Windows[$ver][0].URL
-
-            Start-Process $url
+            $entries = $script:osDatabase.Windows[$verCopy]
+            if ($entries -and $entries.Count -gt 0 -and $entries[0].URL) {
+                Start-Process $entries[0].URL
+            } else {
+                [System.Windows.MessageBox]::Show(
+                    "No se encontro URL para '$verCopy'.",
+                    "NeXus - Error", "OK", "Warning"
+                )
+            }
 
         }.GetNewClosure())
 
@@ -5065,7 +5264,7 @@ $window.FindName("BtnInstalarSeleccionadas").Add_Click({
 
         $pWindow.Dispatcher.Invoke([Action]{
             $pAppName.Text  = "Instalando: $($app.Name)"
-            $pSubTitle.Text = "App $appNum de $totalApps  —  $($app.Desc)"
+            $pSubTitle.Text = "App $appNum de $totalApps  •  Se creara acceso directo en el Escritorio al terminar"
             $pBarInd.Width  = 0
             $pPct.Text      = "0%  •  Iniciando..."
             $pPathPanel.Visibility = "Collapsed"
@@ -5146,18 +5345,21 @@ $window.FindName("BtnInstalarSeleccionadas").Add_Click({
                             $pPathPanel.Visibility = "Visible"
                         }, [System.Windows.Threading.DispatcherPriority]::Render)
 
+                        # Intentar resolver exe con logica mejorada si no se encontro antes
+                        if (-not $foundExe) {
+                            $foundExe = Resolve-AppExe -AppKey $appKey -AppName $app.Name
+                        }
                         if ($foundExe) {
-                            $catFolder = "C:\Nexus\Apps\$script:currentCategory"
-                            if ($script:currentCategory -eq "Especialidad" -and $script:currentSubcategory) {
-                                $catFolder = "C:\Nexus\Apps\Especialidad\$script:currentSubcategory"
-                            }
-                            if (-not (Test-Path $catFolder)) { New-Item -ItemType Directory -Path $catFolder -Force | Out-Null }
-                            $wsh      = New-Object -ComObject WScript.Shell
-                            $sc       = $wsh.CreateShortcut("$catFolder\$($app.Name).lnk")
-                            $sc.TargetPath       = $foundExe
-                            $sc.WorkingDirectory = Split-Path $foundExe
-                            $sc.Description      = $app.Desc
-                            $sc.Save()
+                            $cat = if ($script:currentCategory -eq "Especialidad" -and $script:currentSubcategory) {
+                                $script:currentSubcategory } else { $script:currentCategory }
+                            # Acceso directo en Escritorio + carpeta Nexus
+                            New-DesktopShortcut -AppName $app.Name -ExePath $foundExe -Desc $app.Desc -Category $cat | Out-Null
+                            # Post-instalacion: PATH, comandos de setup
+                            Invoke-PostInstall -AppKey $appKey -ExePath $foundExe | Out-Null
+                            $pWindow.Dispatcher.Invoke([Action]{
+                                $pPathLabel.Text       = $foundExe
+                                $pPathPanel.Visibility = "Visible"
+                            }, [System.Windows.Threading.DispatcherPriority]::Render)
                         }
 
                         $results += [PSCustomObject]@{ Name=$app.Name; Path=$pathText; Status="OK" }
@@ -5203,13 +5405,18 @@ $window.FindName("BtnInstalarSeleccionadas").Add_Click({
 
     $pWindow.Close()
 
+    $shortcutsOk = ($results | Where-Object { $_.Status -eq "OK" -and $_.Path }).Count
     $lines = @("Exitosas: $installed    Fallidas: $failed", "")
     foreach ($r in $results) {
         $icon = switch ($r.Status) { "OK" {"OK"} "FAIL" {"FALLO"} "WEB" {"WEB"} default {"ERR"} }
         $lines += "[$icon]  $($r.Name)"
-        if ($r.Path) { $lines += "       Ruta: $($r.Path)" }
+        if ($r.Path -and $r.Path -notmatch '^http') { $lines += "   Ruta: $($r.Path)" }
     }
-    $lines += @("", "Algunas apps pueden requerir reinicio.")
+    if ($shortcutsOk -gt 0) {
+        $lines += @("", "Se crearon $shortcutsOk accesos directos en el Escritorio.")
+        $lines += "Tambien en: C:\Nexus\Apps\"
+    }
+    $lines += @("", "Algunas apps pueden requerir reinicio del equipo.")
 
     $iconRes = if ($failed -eq 0) { "✅" } else { "⚠️" }
     $titleRes = if ($failed -eq 0) { "Instalación completada" } else { "Instalación con errores" }
@@ -5309,7 +5516,7 @@ $window.FindName("BtnTheme").Add_Click({
 $window.FindName("BtnSalir").Add_Click({
     $r = [System.Windows.MessageBox]::Show(
         "¿Deseas cerrar NeXus?`n`nTodos los procesos en curso se detendrán.",
-        "Salir — NeXus v1.8.7",
+        "Salir — NeXus v1.9.0",
         "YesNo",
         "Question"
     )
@@ -5788,7 +5995,7 @@ $window.FindName("BtnTweakSecurity").Add_Click({
         "⚠️ Requiere privilegios de administrador.`n" +
         "No elimina software legítimo instalado.`n`n" +
         "¿Deseas continuar?",
-        "Limpieza de Seguridad — NeXus v1.8.7",
+        "Limpieza de Seguridad — NeXus v1.9.0",
         "YesNo", "Warning"
     )
     if ($r -eq "Yes") { Start-SecurityClean }
@@ -6490,7 +6697,7 @@ $window.FindName("BtnTheme").Add_Click({
 $window.FindName("BtnSalir").Add_Click({
     $r = [System.Windows.MessageBox]::Show(
         "¿Deseas cerrar NeXus?`n`nTodos los procesos en curso se detendrán.",
-        "Salir — NeXus v1.8.7",
+        "Salir — NeXus v1.9.0",
         "YesNo",
         "Question"
     )
@@ -7168,7 +7375,7 @@ foreach ($folder in $script:nexusFolders) {
 }
 
 # =====================================================
-# SPLASH SCREEN CON ANIMACIÓN GLITCH - NEXUS v1.8.6
+# SPLASH SCREEN CON ANIMACIÓN GLITCH - NEXUS v1.9.0
 # Duración total: ~4.5 segundos
 #   Fase 0 — Glitch caótico:      0.0s – 1.6s  (20 ticks × 80ms)
 #   Fase 1 — Glitch moderado:     1.6s – 2.8s  (15 ticks × 80ms)
@@ -7387,7 +7594,7 @@ function Show-GlitchSplash {
 
         <!-- Versión -->
         <TextBlock x:Name="VersionTag"
-                   Text="v1.8.6  —  Sistema de Instalación Multiplataforma"
+                   Text="v1.9.0  —  Sistema de Instalación Multiplataforma"
                    FontFamily="Consolas" FontSize="11" Foreground="#FF9D6FFF"
                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
                    Margin="0,0,0,14" Opacity="0"/>
