@@ -35,7 +35,7 @@ Write-Host "  ──────────────────────
 Write-Host ""
 
 # ── URL del script principal ──────────────────────────────────────────────
-$scriptUrl = "https://raw.githubusercontent.com/Elilovos777/nexus/main/NeXus_v1_8_7.ps1"
+$scriptUrl = "https://raw.githubusercontent.com/Elilovos777/nexus/main/nexus.ps1"
 
 Write-Host "  🔷 Verificando conexión a internet..." -ForegroundColor Cyan
 
