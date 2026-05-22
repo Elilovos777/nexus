@@ -17,7 +17,7 @@ assets/
 ```
 
 ## Cómo tomar capturas para el repositorio
-assets/glicht .gif
+
 1. Ejecuta NeXus con el comando de instalación del README
 2. Navega a cada sección
 3. Usa `Win + Shift + S` para capturar cada vista
